@@ -7,38 +7,34 @@ export async function getAllCad() {
     return equipamentos
 }
 
-export async function getCadById() {
-    const [ equipamento ] = await db.query("SELECT * FROM equipamentos WHERE id = ?", [id])
+export async function getCadById(id) {
+    const [ equipamentos ] = await db.query("SELECT * FROM equipamentos WHERE id = ?", [id])
 
-    return equipamento[0]
+    return equipamentos[0]
 
 }
 
-export async function postCadastros(body) {
-    const { nome, categoria, serie, status, data } = body
+export async function postEquipamentos(body) {
+    const { nome, categoria, numero_de_serie, status, data_aquisicao } = body
 
-    const equipamento = await db.query(`INSERT INTO equipamentos(nome, categoria, serie, status, data) VALUES (?, ?, ?, ?, ?)`,
-        [nome, categoria, serie, status, data]
+    const id = v4()
+
+    await db.query(`INSERT INTO equipamentos(id, nome, categoria, numero_de_serie, status, data_aquisicao) VALUES (?, ?, ?, ?, ?, ?)`,
+        [id, nome, categoria, numero_de_serie, status, data_aquisicao]
     )
 
-    return equipamento
-    
+    return {
+        id,
+        nome,
+        categoria,
+        numero_de_serie,
+        status,
+        data_aquisicao
+    }    
 }
 export async function deleteCadService(id) {
-    await db.query("DELETED FROM equipamentos WHERE id = ?")
+    await db.query("DELETE FROM equipamentos WHERE id = ?", [id])
     
     return "Equipamento Deleted"
 }
-export async function putCadService(id, body) {
-    const { nome, categoria, serie, status, data } = body
 
-    await db.query(
-        `UPDATE equipamentos
-        SET nome = ?, categoria = ?, serie = ?, status = ?, data =?
-        WHERE id = ?`,
-        [nome, categoria, serie, status, data, id]
-    )
-
-    return "Equipamentos updated"
-    
-}
