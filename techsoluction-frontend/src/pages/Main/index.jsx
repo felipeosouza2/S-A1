@@ -1,6 +1,34 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { MainContainer } from "./styled"
+import { ListaSelecion, MainContainer, RegistroSection } from "./styled"
+ 
+//  export function newPage() {
+//         const [equipamentos, setEquipamentos] = useState([]);
+//         const [paginaAtual, setPaginaAtual] = useState(1);
+
+//         const [itensPorPagina] = useState(10);
+
+//         function nextPage() {
+//             setPaginaAtual(paginaAtual+1)
+
+//             buscarPerifericos()
+//         }
+        
+//         function prevPage(){
+//             if(itensPorPagina === 10){
+//                 if(itensPorPagina === 10){
+//                     setPaginaAtual(1)
+//                 } else {
+//                     setPaginaAtual(itensPorPagina-1)
+//                 }
+                
+//                 buscarPerifericos()
+//         }
+
+
+//     }
+
+    
 
 export function Main() {
     const [equipamentos, setEquipamentos] = useState([])
@@ -13,8 +41,10 @@ export function Main() {
 
     })
 
+
+
     const fetchEquipamentos = async () => {
-        const response = await axios.get('http://127.0.0.1:3003/equipamentos')
+        const response = await axios.get(`http://127.0.0.1:3000/equipamentos`)
         setEquipamentos(response.data)
     }
     const handleInputChange = (e) => {
@@ -25,11 +55,18 @@ export function Main() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         console.log('enviado')
-        const response = await axios.post ('http://127.0.0.1:3003/equipamentos', formData)
+        const response = await axios.post ('http://127.0.0.1:3000/equipamentos', formData)
 
-        setEquipamentos((prev) => [...equipamentos, formData])
+        setEquipamentos([...equipamentos, formData])
         console.log(response)
 
+    }
+    const deleteEquipamentos = async (id) => {
+        const response = await axios.delete  (`http://127.0.0.1:3000/equipamentos/${id}`)
+
+        setEquipamentos([...equipamentos, formData])
+        console.log(response)
+        alert('Produto excluido')
     }
     
     useEffect(() => {
@@ -72,7 +109,7 @@ export function Main() {
                         onChange={handleInputChange}
                     />
                     <input
-                        type="text"
+                        type="date"
                         name="data_aquisicao"
                         placeholder="Data do Equipamento"
                         value={formData.data_aquisicao}
@@ -102,12 +139,20 @@ export function Main() {
                                         <td>{equipamentos.numero_de_serie}</td>
                                         <td>{equipamentos.status}</td>
                                         <td>{equipamentos.data_aquisicao}</td>
+                                            <td><button onClick={() => deleteEquipamentos(equipamentos.id)}>Excluir equipamento</button></td>
                                     </tr>
                                 ))
                             }
                         </tbody>
                     </table>
             </ListaSelecion>
+            {/* //
+            <ButtonsContainer>
+                <button onClick={() => setPaginaAtual(paginaAtual -1)} disabled={paginaAtual === 1}>Anterior</button>
+                <button onClick={prevPage}>Anterior</button>
+
+            </ButtonsContainer>
+            // */}
         </MainContainer>
     )
 };

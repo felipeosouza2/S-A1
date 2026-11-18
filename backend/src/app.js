@@ -7,7 +7,9 @@ export function buildApp() {
 
     const app = Fastify({ Logger: true });
 
-    app.register(cors, {origin: '*'})
+    app.register(cors, {origin: '*',
+        methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+    })
 
     app.register(cadRoutes, { prefix: '/equipamentos' })
 
