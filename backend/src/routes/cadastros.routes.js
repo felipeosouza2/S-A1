@@ -10,5 +10,7 @@ export async function cadRoutes(app) {
     app.delete('/:id', deleteCad)
     // Cadastrar um equipamentos
     app.post('/', postEquipamentos)
+    
+    
 
 }

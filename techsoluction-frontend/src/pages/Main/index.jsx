@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
-import { ListaSelecion, MainContainer, RegistroSection } from "./styled"
+import { ListaSelecion, MainContainer, RegistroSection, ButtonsContainer } from "./styled"
  
 //  export function newPage() {
 //         const [equipamentos, setEquipamentos] = useState([]);
@@ -32,6 +32,9 @@ import { ListaSelecion, MainContainer, RegistroSection } from "./styled"
 
 export function Main() {
     const [equipamentos, setEquipamentos] = useState([])
+    const [pagina, setPagina] = useState(1)
+    const [limite] = useState(10)
+    
     const [formData, setFormData] = useState({
         nome: '',
         categoria: '',
@@ -44,7 +47,7 @@ export function Main() {
 
 
     const fetchEquipamentos = async () => {
-        const response = await axios.get(`http://127.0.0.1:3000/equipamentos`)
+        const response = await axios.get(`http://127.0.0.1:3000/equipamentos?page=${pagina}&limit=${limite}`)
         setEquipamentos(response.data)
     }
     const handleInputChange = (e) => {
@@ -72,7 +75,7 @@ export function Main() {
     useEffect(() => {
         fetchEquipamentos();
 
-    }, [equipamentos])
+    }, [pagina]);
 
     return (
         <MainContainer>
@@ -146,13 +149,13 @@ export function Main() {
                         </tbody>
                     </table>
             </ListaSelecion>
-            {/* //
+            //
             <ButtonsContainer>
-                <button onClick={() => setPaginaAtual(paginaAtual -1)} disabled={paginaAtual === 1}>Anterior</button>
-                <button onClick={prevPage}>Anterior</button>
+                <button onClick={() => setPagina(pagina -1)} disabled={pagina === 1}>Anterior</button>
+                <button onClick={() => setPagina(pagina +1)} disabled={equipamentos.length < limite}>Proximo</button>
 
             </ButtonsContainer>
-            // */}
+            //
         </MainContainer>
     )
 };

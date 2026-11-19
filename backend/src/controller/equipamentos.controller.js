@@ -2,7 +2,7 @@ import { deleteCadService, getAllCad, getCadById, postEquipamentos as postEquipa
 
 
 export async function listAllCad (request, response){
-    const equipamentos = await getAllCad()
+    const equipamentos = await getAllCad(request.query.page, request.query.limit)
    
     return response.code(200).send(equipamentos)
 }
